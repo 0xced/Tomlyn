@@ -39,12 +39,6 @@ internal class StandardObjectDynamicAccessor : ObjectDynamicAccessor
             // Skip any properties that we can't read
             if (!prop.CanRead) continue;
 
-            // Skip properties that are string or value types and are read-only
-            if ((prop.PropertyType == typeof(string) || prop.PropertyType.IsValueType) && !prop.CanWrite)
-            {
-                continue;
-            }
-
             if (!_props.ContainsKey(name))
             {
                 _props[name] = prop;
@@ -59,12 +53,6 @@ internal class StandardObjectDynamicAccessor : ObjectDynamicAccessor
                 var name = Context.GetFieldName(field);
                 // If the field name is null, the field can be ignored
                 if (name is null) continue;
-
-                // Skip fields that are string or value types and are read-only
-                if ((field.FieldType == typeof(string) || field.FieldType.IsValueType) && field.IsInitOnly)
-                {
-                    continue;
-                }
 
                 if (!_fields.ContainsKey(name))
                 {

@@ -29,6 +29,25 @@ list = [4, 5, 6]
         }
 
         [Test]
+        public void TestAnonymousObject()
+        {
+            const string expected = @"name = ""Liam""
+number = 42
+names = [""Liam""]
+numbers = [42]
+";
+            var toml = Toml.FromModel(new
+            {
+                Name = "Liam",
+                Number = 42,
+                Names = new[] { "Liam" },
+                Numbers = new[] { 42 },
+            });
+
+            AssertHelper.AreEqualNormalizeNewLine(expected, toml);
+        }
+
+        [Test]
         public void TestUri()
         {
             var expected = new Uri("https://example.com");
@@ -39,7 +58,7 @@ list = [4, 5, 6]
                 ConvertToToml = (value) => value is Uri uri ? uri.ToString() : null
             };
             var success = Toml.TryToModel<TestConfigWithUri>(text, out var result, out var diagnostics, null, options);
-            
+
             Assert.True(success);
             Assert.AreEqual(expected, result?.ServiceUri);
 
